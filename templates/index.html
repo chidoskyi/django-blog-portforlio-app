@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+    <section class="biosec container flex">
+      <div class="bio">
+        <h4>{{home.greetings}}</h4>
+        <h1>
+          I'm
+          <div>
+            <span class="multi-text">Coder</span>
+            <span class="blink"></span>
+          </div>
+        </h1>
+        <p>
+          {{home.description}}
+        </p>
+        
+        <div class="emailsub">
+          <div class="alert alert-dismissible flex" id="subscription-message"  style="display: none; role="alert">
+            <!-- Message content will be added dynamically here -->
+            <span id="messageContent"></span>
+            <span class="clear-btnn" id="clearBtnn">&times;</span>
+        </div>
+          <form action="{% url "subscribe" %}" id="subscription-form" method = "Post" class="flex">
+            {% csrf_token %}
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email here"
+              required
+            />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+        {% comment %} <div class="emailsub">
+          <div class="alert alert-dismissible flex" id="subscription-message"  style="display: none; role="alert">
+            <!-- Message content will be added dynamically here -->
+            <span id="messageContent"></span>
+            <span class="clear-btnn" id="clearBtnn">&times;</span>
+        </div>
+            <form method="GET" action="{% url 'post-search' %}" class="flex">
+            <input type="text" id="formControl" name="q" class="form-control" placeholder="Search.." value="{{ request.GET.q }}"/>
+            <span class="clear-btn" id="clearBtn">&times;</span>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
+        </div> {% endcomment %}
+      </div>
+      <div class="bioimg">
+        <img src="{{home.home_img.url}}" alt="" />
+        <div class="pattern-1">
+          <img src="{% static '' %}assests/images/svg/pattern-1.svg" alt="" />
+        </div>
+        <div class="pattern-2">
+          <img src="{% static '' %}assests/images/svg/pattern-2.svg" alt="" />
+        </div>
+        <div class="pattern-3">
+          <img src="{% static '' %}assests/images/svg/pattern-3.svg" alt="" />
+        </div>
+        <div class="pattern-4">
+          <img src="{% static '' %}assests/images/svg/pattern-4.svg" alt="" />
+        </div>
+      </div>
+    </section>
+    <section class="hottopicsec container flex">
+      <div class="hottopics">
+        <h3>Hot Topics</h3>
+        <p>
+          Don't miss out on the latest news about tips, Hotel review, food
+          guide...
+        </p>
+        <div class="lrbtn">
+          <button class="leftbtn">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="rightbtn">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="hotcards flex">
+        {% for tag in tags %}
+        <div class="hcard">
+          
+          <a href="{% url "tags" tag.slug %}">
+            {% comment %} <img src="{% static '' %}assests/images/img/travel.jpg" alt="" /> {% endcomment %}
+            {% comment %} {% if tag in first_posts_by_tag %} {% endcomment %}
+              <img src="{% static '' %}assests/images/img/travel.jpg" alt="" />
+            {% comment %} {% endif %} {% endcomment %}
+          </a>
+          <div class="hdetails">
+            <div class="hdetail">
+              <h4>{{tag.title|title}}</h4>
+              <p>{{ tag.posts.count }} Article{% if tag.posts.count != 1 %}s{% endif %}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        
+      </div>
+    </section>
+    <div class="bigtitle container">
+      <h2 class="textcolor">Editor's Picked</h2>
+      <p>Featured and highly articles</p>
+    </div>
+    <section class="editorcards container flex">
+       {% for post in popular_posts|slice:":5" %}
+      <div class="edcard">
+       <a href="{{ post.get_absolute_url }}">
+                  <img src="{{ post.picture.url }}" loading="lazy"  alt="">
+                </a>
+          <div class="edcarddetl">
+            <div class="tagtime flex">
+              <div class="tagtime flex">
+              {% for tag in post.tag.all %}
+              <a href="{% url "tags" tag.slug %}"><h5><span>#{{tag}}</span></h5></a>
+              {% endfor %}
+              </div>
+              <h5 class="flex">
+                <i class="fa-regular fa-clock"></i>
+                <span></span>{{post.posted|naturaltime}}
+              </h5>
+            </div>
+
+            <a href="/">
+              <h2>{{ post.title|truncatechars:30|safe|title }}</h2>
+            </a>
+          </div>
+          <div class="postby flex">
+            <div class="authorbx flex">
+              <img src="{{ post.author.profile.image.url }}" alt="" />
+              <div class="authorname">
+                <h4>{{ post.author|title }}</h4>
+                <span>{{post.posted|naturaltime}}</span>
+              </div>
+            </div>
+            <a href="{% url 'post-detail' pk=post.pk %}" class="readmore"><span>Read More</span></a>
+          </div>
+        </a>
+      </div>
+      {% endfor %} 
+
+      <div class="showmorepost flex">
+        <a href="{% url "post-list" %}">Show More Posts<i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </section>
+    <div class="contact-banner container flex">
+      <img src="{% static '' %}assests/images/img/contactus.jpg" alt="" />
+    </div>
+    <div class="bigtitle container">
+      <h2 class="textcolor">Popular Tags</h2>
+      <p>Most Searched Keyword</p>
+    </div>
+    <div class="tegsec container flex">
+      {% for tag in tags|slice:":12" %}
+      <a href="{% url "tags" tag.slug %}"><img src="{{ tag.image.url }}" alt="" />{{tag.title|title}}</a>
+      {% endfor %}
+    </div>
+    <section class="recentpostsec container flex">
+      <div class="recentposts">
+        <div class="bigtitle">
+          <h2 class="textcolor">Popular Posts</h2>
+          <p>Most Searched Keyword</p>
+        </div>
+         {% for post in popular_posts|slice:":4" %}
+        <div class="posts">
+          <div class="post flex">
+            <a href="{{ post.get_absolute_url }}">
+              <img src="{{ post.picture.url }}"  alt="">
+            </a>
+            <div class="post-details">
+                <div class="post-labels" style="display: flex; justify-content: space-between;">
+                  {% if request.user.is_authenticated %}
+                <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                <div>
+                  {% if post.author == user %}
+                  <a href="{% url "post-update" post.pk %}">Update</a>
+                  <a href="{% url "post-delete" post.pk %}">Delete</a>
+                  {% endif %}
+                </div>
+                {% else %}
+                <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                {% endif %}
+              </div>
+              <a href="/">
+                <h2>{{ post.title|truncatechars:50|safe|title }}</h2>
+              </a>
+              <p>
+                {{ post.content|truncatechars:100|safe }}
+              </p>
+              <div class="posttimetag flex">
+                <div class="flex">
+                  {% for tag in post.tag.all %}
+                  <a href="{% url "tags" tag.slug %}"><h5><span>#</span>{{tag}}</h5></a>
+                  {% endfor %}
+                </div>
+                <div class="tagtime">
+                  <h5>
+                    <i class="fa-regular fa-clock"></i>
+                    <span></span>{{post.posted|naturaltime}}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %} 
+        
+      </div>
+      <div class="post-slider">
+        <div class="popular-posts">
+          <div class="pop-title">
+            <h3>Popular Posts</h3>
+          </div>
+          <div class="popular-posts">
+            {% for post in posts|slice:":4" %}
+            <div class="popuppost flex">
+              <a href="{{ post.get_absolute_url }}">
+                  <img src="{{ post.picture.url }}" loading="lazy"  alt="">
+                </a>
+              <div class="popupostde">
+                <a href="/">
+                  <h4>{{post.title|title|truncatechars:40}}</h4>
+                </a>
+                <div class="popuptime flex">
+                  <span>{{post.posted|naturaltime}}</span> 
+                </div>
+              </div>
+            </div>
+             {% endfor %} 
+          </div>
+        </div>
+        <div class="popular-posts">
+          <div class="pop-title">
+            <h3>Last Comments</h3>
+          </div>
+          
+          {% for comment in latest_comments|slice:":5" %}
+              <div class="comment">
+                <p><span>"</span>{{ comment.body }}<span>"</span></p>
+                <div class="authorcomment flex">
+                  {% if comment.user %}
+                  {% if comment.user.profile.image.url %}
+                    <img src="{{ comment.user.profile.image.url }}" alt="Profile Picture">
+                    {% else %}
+                    <img src="{% static 'assests/images/img/default.jpg' %}" alt="Profile Picture">
+                    {% endif %}
+                    <div class="authortimename">
+                      <h5>{{ comment.user.username|title }}</h5>
+                      <span>{{ comment.date }}</span>
+                    </div>
+                  {% else %}
+                    <img src="{% static 'assests/images/img/default.jpg' %}" alt="Default Avatar">
+                    <div class="authortimename">
+                      <h5>{{ comment.name|title }}</h5>
+                      <span>{{ comment.date }}</span>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %} 
+          
+        </div>
+      </div>
+    </section>
+  {% endblock content %}
+  {% block footer %}{% include "footer.html" %}{% endblock footer %}
+  

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Services{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+<!-- =====Service Section Starts===== -->
+
+<section class="service section " id="service">
+    <div class="container">
+      <div class="row">
+        <div class="section-title padd-15">
+          <h2>Services</h2>
+        </div>
+      </div>
+      <div class="row padd-15 fix-row">
+        <!-- =====Service Item Starts===== -->
+
+        {% for service in services %}
+        <div class="service-item padd-15">
+          <div class="service-item-inner">
+            <div class="icon">
+              <i class="fa {{service.icon}}"></i>
+            </div>
+            <h4>{{service.name}}</h4>
+            <p>
+              {{service.description}}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- =====Service Item Ends===== -->
+        <!-- =====Service Item Starts===== -->
+
+
+
+        <!-- =====Service Item Ends===== -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =====services Section Ends===== -->
+
+  <!-- =====Portfolio Section Starts===== -->
+
+  <section class="portfolio section " id="portfolio">
+    <div class="container">
+      <div class="row">
+        <div class="section-title padd-15">
+          <h2>Porfolio</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="portfolio-heading padd-15">
+          <h2>My Last Projects: </h2>
+        </div>
+      </div>
+      <div class="row">
+        <!-- =====Portfolio item Starts===== -->
+        {% for portfolio in portfolios %}
+        <div class="portfolio-item padd-15">
+          <div class="portfolio-item-inner shadow-dark">
+            <div class="portfolio-img">
+              <img src="{{portfolio.image.url}}" alt="">
+            </div>
+            <div class="portfolio_link">
+              <a href="{{portfolio.details_url}}" class="portfolio_link-name">View details</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- =====Portfolio item Ends===== -->
+        <!-- =====Portfolio item Starts===== -->
+
+
+
+        <!-- =====Portfolio item Ends===== -->
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- =====Portfolio Section Ends===== -->
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}

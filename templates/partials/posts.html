@@ -1,0 +1,63 @@
+{% load humanize %}
+{% for post in posts %}
+            <div class="post-content" >
+              <div class="post-image">
+                <a href="{{ post.get_absolute_url }}">
+                  <img src="{{ post.picture.url }}" loading="lazy" alt="">
+                </a>
+              </div>
+              <div class="post-content-details">
+                  <div class="post-labels" style="display: flex; justify-content: space-between;">
+                    {% if request.user.is_authenticated %}
+                  <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                  <div>
+                    {% if post.author == user %}
+                    <a href="{% url "post-update" post.pk %}">Update</a>
+                    <a href="{% url "post-delete" post.pk %}">Delete</a>
+                    {% endif %}
+                  </div>
+                  {% else %}
+                  <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                  {% endif %}
+                  </div>
+                  <a href="{% url 'post-detail' pk=post.pk %}">
+                    <h2>{{ post.title|title }}</h2>
+                  </a>
+                  <p>{{ post.content|truncatechars:100|safe  }}
+                     <a href="{% url 'post-detail' pk=post.pk %}">Read more</a>
+                  </p>
+                  <div class="post-author-time" >
+                    <img src="{{ post.author.profile.image.url }}" width="50px" height="50px" alt="">
+                    <div class="post-time">
+                      <div class="authortime flex">
+                        <h5 class="author-name">{{ post.author|title }}</h5>
+                      <h5>
+                        <i class="fa-regular fa-clock"></i>
+                        <span></span>{{post.posted|naturaltime}}
+                      </h5>
+                      </div>
+                      <div class="author-tags">
+                        <div class="flex">
+                            {% for tag in post.tag.all %}
+                          <a href="{% url "tags" tag.slug %}"><h5><span>#</span>{{tag}}</h5></a>
+                          {% endfor %} 
+                          {% comment %} <a href="/"><h5><span>#</span>Lifestyle</h5></a> {% endcomment %}
+                        </div> 
+                        <div class="star-rating flex">
+                        <div class="reaction-counts flex" id="reactionCounts" style="margin-right: 20px;">
+                          
+                        </div>
+                        
+                          <span class="star" onclick="gfg(2, 1)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 2)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 3)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 4)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 5)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                      </div>
+                      <div id="output2"></div>                          
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            {% endfor %} 

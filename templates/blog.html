@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+<!-- =====About Section Ends===== -->
+<section class="about section " id="about">
+    <div class="container padd">
+      <div class="row bg-color">
+        <div class="section-title padd-15">
+          <h2>Blogs</h2>
+        </div>
+      </div>
+      <div class="row padd-15 row-child">
+          <div class="post-items" id="post-container">
+            <div class="post-header">
+              <h2>Latest Blog Post</h2>
+            </div>
+            {% include 'partials/posts.html' %}
+          </div> 
+          
+            <div class="side-bar-items flex">
+              <div class="post-header">
+              
+              <h2><i class="fa-solid fa-magnifying-glass"></i>Search</h2>
+            </div>
+              <div class="tag-contents">
+                <div class="side-bar-item">
+                  <div>
+                    <div class="btn-search">
+                      <form method="POST" action="{% url 'post-search' %}" class="flex">
+                        {% csrf_token %}
+                        <input type="text" id="formControll" name="query"  class="form-control" placeholder="Search.." value="{{ request.POST.query }}"/>
+                        <span class="clear-btnnn" id="clearBtnn">&times;</span>
+                        <button type="submit" class="btnn" style="border: 1px solid #94a9c9; width: 50px; height: 43px; margin-left: -3px;" ><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                  </div>
+                  </div> 
+                </div>
+              </div>
+            <div class="post-header">
+              
+              <h2><i class="fa-solid fa-tag"></i>Tags</h2>
+            </div>
+              <div class="tag-contents">
+                <div class="side-bar-item">
+                  <div>
+                    {% for tag in tags %}
+                    <a href="{% url "tags" tag.slug %}" class="flex">
+                        {% comment %} {% for post in tag.posts.all %} {% endcomment %}
+                        <img src="{{ tag.image.url }}" style="border-radius: 50%;" alt="">  
+                        {% comment %} {% endfor %} {% endcomment %}
+                        {{tag.title}}
+                    </a> 
+                    {% endfor %}
+                  </div> 
+                </div>
+              </div>
+            
+            <aside class="aside-bar">
+              <div class="post-header">
+                <h2>Category</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="side-bar-item">
+                     {% for category in category %}
+                    <div><a href="{% url "view-category" category.name %}">{{category|title}}</a></div>
+                    {% endfor %}
+                  </div>
+               </aside>
+
+               <aside class="aside-bar-2" style="width: 100%;">
+              <div class="post-header">
+                <h2>Newsletter</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="newsletterfooter newsletterfoter">
+                    <!-- <h3>Newsletter</h3> -->
+                    <p>
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Voluptates, ipsa.
+                    </p>
+                    <div class="alert alert-dismissible flex" id="newsletter-message" style="display: none;" role="alert">
+                      <span id="messageContent"></span>
+                      <span class="clear-btnn" id="clearBtnn">&times;</span>
+                  </div>
+                    <form action="{% url "newsletter" %}" method="POST" id="newsletter-form" class="flex"> 
+                      {% csrf_token %}
+                      <div class="flex">
+                          <i class="fa-regular fa-user"></i>
+                          <input type="name" name="name" placeholder="Your Name" id="name" />
+                      </div>
+                      <div class="flex">
+                          <i class="fa-regular fa-envelope"></i>
+                          <input type="email" name="email" placeholder="Email Address" id="email" /> 
+                      </div>
+                      <button type="submit">
+                          Subscribe<i class="fa-solid fa-arrow-right"></i>
+                      </button>
+                  </form>
+                  
+                  </div>
+              </aside>
+          </div>
+      </div>   
+      </div>
+  </section>
+  <div class="btn-load">
+    <button type="button" class="btn" >Load More <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+  </div>
+  
+  <!-- =====About Section Ends===== -->
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}

@@ -1,0 +1,82 @@
+{% load static %}
+<header id="header">
+    <div class="nav-toggler">
+        <i class="fa fa-bars"></i>
+      </div>
+    <nav class="container1 flex">
+      
+      <div class="logo flex">
+        <div class="logoimg">
+          <img src="{% static '' %}assests/images/img/logo.png" alt="" />
+        </div>
+        <a href="{% url "index" %}"><h1>Netphixs</h1></a>
+      </div>
+      <div class="navlist flex">
+        <ul class="flex">
+          <li><a href="{% url "index" %}" class="active"><i class="fa fa-home"></i>Home</a></li>
+          <li><a href="{% url "about" %}"><i class="fa fa-user"></i>About Me</a></li>
+          <li><a href="{% url "post-list" %}"><i class="fa-solid fa-folder"></i>Blogs</a></li>
+          <li><a href="{% url "service" %}"><i class="fa fa-list"></i>Services</a></li>
+          <li><a href="{% url "contact" %}"><i class="fa fa-comments"></i>Contact Us</a></li>
+          {% if request.user.is_authenticated %}
+          <li><a href="{% url 'profile' username=user.username %}" style="display: flex; align-items: center; gap: 5px;"> 
+            <img src="{{user.profile.image.url}}" style="width: 25px; height: 25px; border-radius: 50%; " alt="" > 
+            <span>Hi {{user.username}}!</span>
+          </a></li>
+          {% endif %}
+          <li class="dropdown" >
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}"><i class="fa fa-comments"></i>Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}"><i class="fa fa-comments"></i>Login</a>
+            {% endif %}
+            <div class="dropdown-content">
+              {% if request.user.is_authenticated %}
+                <a href="{% url 'profile' username=user.username %}"><i class="fa fa-comments"></i>Profile</a>
+                <a href="{% url "post-create" %}"><i class="fa fa-comments"></i>Add Post</a>
+                <a href="{% url "add-category" %}"><i class="fa fa-comments"></i>Add Category</a>
+                {% else %}
+                <a href="{% url "sign-up" %}"><i class="fa fa-comments"></i>Sign Up</a>
+                
+                {% endif %}
+            </div>
+            <i class="fa fa-sort-desc dropdown-toggle" aria-hidden="true"></i>
+          </li>    
+        
+        </ul>
+      </div>
+      <div class="searchdarksub flex">
+        <div class="searchbar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <div class="searchclick">
+            <div class="btn-search">
+              <form method="POST" action="{% url 'post-search' %}">
+                {% csrf_token %}
+                <input type="text" id="formControl" name="query" class="form-control" placeholder="Search.." value="{{ request.POST.query }}"/>
+                <span class="clear-btn" id="clearBtn">&times;</span>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </div>
+            <div class="tagsec">
+              <h1>Popular Tags:</h1>
+              <div class="tags">
+                {% for tag in tags|slice:":5" %} 
+                <a href="{% url "tags" tag.slug %}">#{{tag.title}}<span>,</span></a> 
+                 {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="toggle-switch">
+          <input
+            type="checkbox"
+            class="l toggle-checkbox"
+            name="toggle-switch"
+            id="toggleSwitch"
+          />
+          <label for="toggleSwitch" class="toggle-label"></label>
+        </div>
+        <button class="btn-subs" ><a href="#footer">Subscribe</a></button>
+      </div>
+    </nav>
+  </header>

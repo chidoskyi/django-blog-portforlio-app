@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Post Details{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+<!-- =====About Section Ends===== -->
+<section class="about section " id="about">
+    <div class="container padd">
+      <div class="row bg-color">
+        <div class="section-title padd-15">
+          <h2>Post Details</h2>
+        </div>
+      </div>
+      <div class="row padd-15 row-child">
+          <div class="post-items">
+            <div class="post-content detail-page padd">
+              <div class="post-image">
+                <a href="">
+                  <img src="{{ post.picture.url }}"  alt="">
+                </a>
+              </div>
+              <div class="post-content-details padd">
+                <div class="post-author-time">
+                  <img src="{{ post.author.profile.image.url }}" width="50px" height="50px" alt="">
+                  <div class="post-time">
+                    <div class="authortime flex">
+                      <h5 class="author-name">{{ post.author }}</h5>
+                    <h5>
+                      <i class="fa-regular fa-clock"></i>
+                      <span></span>{{post.posted|naturaltime}}
+                    </h5>
+                    </div>
+
+                    
+                    <div class="author-tags flex" style="flex-direction: row; ">
+                      <div class="reaction-count flex" >
+                        
+                            {% comment %} <button class="reactional reaction likes-btn" data-liked="true"></button> {% endcomment %}
+                            <button class="reactional reaction likes-btn" id="like-button" data-liked="{% if liked %}true{% else %}false{% endif %}">
+                              {% if liked %}
+                                  <i class="fa-solid fa-heart likes" style=""></i>
+                              {% else %}
+                                  <i class="fa-regular fa-heart hates"></i>
+                              {% endif %}
+                          </button>
+
+
+                          
+                      
+                      <small class="like-small">Likes:</small>
+                      <small class="count like-smalls" id="num">{{total_likes}}</small>
+                      </div>
+                      <div class="">
+                      <div class="flex">
+                        {% for tag in post.tag.all %}
+                          <a href="{% url "tags" tag.slug %}"><h5><span>#</span>{{tag}}</h5></a>
+                          {% endfor %}
+                      </div> 
+                      
+                      <div class="star-rating">
+                        <span class="star" onclick="gfg(2, 1)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span class="star" onclick="gfg(2, 2)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span class="star" onclick="gfg(2, 3)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span class="star" onclick="gfg(2, 4)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span class="star" onclick="gfg(2, 5)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                    </div>
+                    <div id="output2"></div>   
+                  </div>                       
+                    </div>
+                  </div>
+                </div>
+                <div class="post-labels" style="display: flex; justify-content: space-between;">
+                  {% if request.user.is_authenticated %}
+                  {% comment %} {% for category in category_posts %} {% endcomment %}
+                <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                {% comment %} {% endfor %} {% endcomment %}
+                <div>
+                  {% if post.author == user %}
+                  <a href="{% url "post-update" post.pk %}">Update</a>
+                  <a href="{% url "post-delete" post.pk %}">Delete</a>
+                  {% endif %}
+                </div>
+                {% endif %}
+                  
+                  </div>
+                  <a href="/">
+                    <h2>{{ post.title }}</h2>
+                  </a>
+                  <p>
+                    {{ post.content |safe }}
+                  </p>
+              </div>
+            </div>
+            <div class="post-content detail-page padd">
+              <h1>Leave a Comment</h1>
+              <div class="comment-section">
+                {% include 'comment_form.html' %}
+                {% comment %} {% if comment %}
+                {% include 'comment_update.html' %}
+                {% endif %} {% endcomment %}
+              </div>
+              <div id="comment-section">
+              {% if comments %}
+              {% for comment in comments %}
+              
+              {% if forloop.first %}
+              <hr>
+              {% endif %}
+              
+              <div class="comment-reply flex"  style="border-bottom: 1px solid #e8edf5; margin-top: 10px;">
+                <div class="head-comment-avatar">
+                  
+                  {% if comment.user.profile.image.url %}
+                    <img src="{{ MEDIA_URL }}{{comment.user.profile.image.url }}" style="border-radius: 50%;" alt="">
+                {% else %}
+                    <img src="{% static 'assests/images/img/default.jpg' %}" style="border-radius: 50%;" alt="">
+                {% endif %}
+                  
+                </div>
+                <div class="comment-replys">
+                  <div class="comment-author-time-comment">
+                    <div class="comment-country flex "  style="margin-bottom: 4px;">
+                      {% if request.user.is_authenticated %}
+                        {% if request.user == comment.user %}
+                            <h5>{{ request.user.username }}</h5>
+                        {% else %}
+                            <h5>{{ comment.name|title }}</h5>
+                        {% endif %}
+                    {% else %}
+                        <h5>{{ comment.name|title }}</h5>
+                    {% endif %}
+                      <span>{{ comment.date }}</span>
+                    <small>NG</small>
+                  </div>
+                    <p class="reply-parag">{{ comment.body }}</p>
+                    <div class="comment-reaction-reply flex">
+                      <div class="flex reply-likes" >
+                      <button class="reply flex"  onclick="toggleCommentAvatar('{{ comment.id }}')"><i class="fa-solid fa-reply"></i>Reply</button>
+                      
+                      <div class="reaction-counts flex" id="reactionCounts">
+                           <div class="reaction-count flex" >
+                                <button class="reactionals reaction likes-btnn like-button" data-comment-id="{{ comment.id }}" type="submit">
+                                  {% if comment.liked_comment %}
+                                  <i class="fa-solid fa-heart hate"></i>
+                              {% else %}
+                                  <i class="fa-regular fa-heart likes"></i>
+                              {% endif %}
+                                </button>
+                            <small class="likes-smal">Likes:</small>
+                            <small class="count like-smal" id="like-count-{{ comment.id }}">{{ comment.totals_likes }}</small>
+                            
+                           
+                          </div> 
+                        
+                      </div>
+                    </div>
+                    <div class="flex comment-edits">
+                      {% if request.user.is_authenticated and request.user == comment.user %}
+
+                          <form method="POST">
+                              {% csrf_token %}
+                              <input type="hidden" name="edit_comment_id" value="{{ comment.pk }}">
+                              <button type="submit">Update</button>
+                          </form>
+                          
+                          {% endif %}
+
+                      {% if request.user.is_authenticated and request.user == comment.user %}
+                          <form method="POST" id="delete-comment-form-{{ comment.pk }}" class="delete-comment-form" data-comment-id="{{ comment.pk }}">
+                              {% csrf_token %}
+                              <input type="hidden" name="delete_comment_id" value="{{ comment.pk }}">
+                              <button type="submit">Delete</button>
+                          </form>
+                          <!-- <button type="button" onclick="deleteComment('{{ comment.pk }}')">Delete</button> -->
+
+                          {% endif %}
+                    </div>
+                    </div>
+                  </div>
+                  
+                  <div class="comment-section comment-avatars" id="comment-avatar-{{ comment.id }}">
+                    {% include 'reply_form.html' %}
+                  </div>
+                  
+              </div>
+              {% for reply in comment.replies.all %}
+                <div class="reply-comment2 flex" style="border-top: 1px solid #e8edf5; border-bottom: none; padding-top: 5px;">
+                  <div class="reply-comment2-img">
+                    {% if reply.user.profile.image.url %}
+                        <img src="{{ reply.user.profile.image.url }}" style="border-radius: 50%;" alt="">
+                    {% else %}
+                        <img src="{% static 'assests/images/img/default.jpg' %}" style="border-radius: 50%;" alt="">
+                    {% endif %}
+                  </div>
+                  <div class="comment-author-time-comment">
+                    <div class="comment-country flex">
+                        {% if reply.user %}
+                          <h5>{{ reply.user.username|title }}</h5>
+                      {% else %}
+                          <h5>{{ reply.name|title }}</h5>
+                      {% endif %}
+                      <span>{{ reply.date }}</span>
+                    <small>NG</small>
+                      </div>
+                      <p class="reply-parag">{{ reply.body }}</p>
+                      <div class="comment-reaction-reply flex">
+                        <!-- <button class="reply"><i class="fa-solid fa-reply"></i>Reply</button> -->
+                        
+                        <div class="reaction-counts flex" id="reactionCounts">
+                          <div class="reaction-count">
+                           
+                            <button class="reactionals reaction likes-btnn like-button-reply" data-reply-id="{{ reply.id }}" type="submit" >
+                              {% if reply.liked_comment %}
+                                  <i class="fa-solid fa-heart likes"></i>
+                              {% else %}
+                                  <i class="fa-regular fa-heart hate"></i>
+                              {% endif %}
+                          </button>
+                            <small class="likes-smal">Likes:</small>
+                           <small class="count like-smal" id="like-count-{{ reply.id }}">{{ reply.total_reply_likes }}</small>
+                         </div> 
+
+                         <div class="flex comment-edits">
+                          {% if request.user.is_authenticated and request.user == comment.user %}
+    
+                              <form method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="edit_comment_id" value="{{ comment.pk }}">
+                                  <button type="submit">Update</button>
+                              </form>
+                              
+                              {% endif %}
+    
+                          {% if request.user.is_authenticated and request.user == comment.user %}
+                              <form method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="delete_comment_id" value="{{ comment.pk }}">
+                                  <button type="submit">Delete</button>
+                              </form>
+                              {% endif %}
+                        </div>
+                     </div>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+              
+            </div>
+            </div>
+            {% endfor %}
+            {% else %}
+              <h3 class="no-comments">No Comments Yet</h4>
+              {% endif %}
+              </div>
+            </div>
+            
+          </div> 
+            <div class="side-bar-items flex">
+              
+            <div class="post-header">
+              
+              <h2><i class="fa-solid fa-tag"></i>Search</h2>
+            </div>
+              <div class="tag-contents">
+                <div class="side-bar-item">
+                  <div>
+                    <div class="btn-search">
+                      <form method="POST" action="{% url 'post-search' %}" class="flex">
+                        {% csrf_token %}
+                        <input type="text" id="formControll" name="query" style="" class="form-control" placeholder="Search.." value="{{ request.POST.query }}"/>
+                        <span class="clear-btnnn" id="clearBtnn">&times;</span>
+                        <button type="submit" class="btnn" style="border: 1px solid #94a9c9; width: 50px; height: 43px; margin-left: -3px;" ><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                  </div>
+                  </div> 
+                </div>
+              </div>
+            <div class="post-header">
+              
+              <h2><i class="fa-solid fa-tag"></i>Tags</h2>
+            </div>
+              <div class="tag-contents">
+                <div class="side-bar-item">
+                  <div>
+                    {% for tag in tags %}
+                    <a href="{% url "tags" tag.slug %}" class="flex">
+                        {% comment %} {% for post in tag.posts.all %} {% endcomment %}
+                        <img src="{{ tag.image.url }}" style="border-radius: 50%;" alt="">  
+                        {% comment %} {% endfor %} {% endcomment %}
+                        {{tag.title}}
+                    </a> 
+                    {% endfor %}
+                  </div> 
+                </div>
+              </div>
+
+            <aside class="aside-bar " >
+              <div class="post-header">
+                <h2>Category</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="side-bar-item">
+                    {% for category in categories %}
+                    <div><a href="{% url "view-category" category.name %}">{{category.name}}</a></div>
+                    {% endfor %}
+                  </div>
+               </aside>
+
+               <aside class="aside-bar-2" style="width: 100%;" >
+              <div class="post-header">
+                <h2>Newsletter</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="newsletterfooter newsletterfoter">
+                    <!-- <h3>Newsletter</h3> -->
+                    <p>
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Voluptates, ipsa.
+                    </p>
+                    <div class="alert alert-dismissible flex" id="newsletter-message" style="display: none;" role="alert">
+                      <span id="messageContent"></span>
+                      <span class="clear-btnn" id="clearBtnn">&times;</span>
+                  </div>
+                    <form action="{% url "newsletter" %}" method="POST" id="newsletter-form" class="flex"> 
+                      {% csrf_token %}
+                      <div class="flex">
+                          <i class="fa-regular fa-user"></i>
+                          <input type="name" name="name" placeholder="Your Name" id="name" />
+                      </div>
+                      <div class="flex">
+                          <i class="fa-regular fa-envelope"></i>
+                          <input type="email" name="email" placeholder="Email Address" id="email" /> 
+                      </div>
+                      <button type="submit">
+                          Subscribe<i class="fa-solid fa-arrow-right"></i>
+                      </button>
+                  </form>
+                  </div>
+              </aside>
+          </div>
+      </div>   
+      </div>
+  </section>
+  
+  <!-- =====About Section Ends===== -->
+  
+  <script>
+            
+          function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+          let btn = document.getElementById('like-button');
+          let num_of_likes = document.getElementById('num');
+          let post_id = "{{ post.id }}";
+      
+          btn.addEventListener('click', likePost);
+      
+          function likePost(e) {
+              let url = "{% url 'add-post-likes' post.pk %}";
+              const data = { id: post_id };
+      
+              fetch(url, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': csrftoken
+                  },
+                  body: JSON.stringify(data)
+              })
+              .then(res => res.json())
+              .then(data => {
+                  console.log(data);
+      
+                  if (data["check"] == 1) {
+                      btn.querySelector('i').classList.remove("fa-regular");
+                      btn.querySelector('i').classList.add("fa-solid");
+                      btn.setAttribute('data-liked', 'true');
+                  } else if (data["check"] == 0) {
+                      btn.querySelector('i').classList.remove("fa-solid");
+                      btn.querySelector('i').classList.add("fa-regular");
+                      btn.setAttribute('data-liked', 'false');
+                  } else {
+                      alert('You need to log in');
+                  }
+      
+                  num_of_likes.innerHTML = data['num_of_likes'];
+              });
+          }
+        });
+      
+</script>
+  <script>
+            
+         
+    $(document).ready(function() {
+      $('.like-button').click(function() {
+          var commentId = $(this).data('comment-id');
+          var url = '{% url "add-comment-likes" post.pk %}';
+  
+          $.ajax({
+              type: 'POST',
+              url: url,
+              data: {
+                  'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                  'comment_id': commentId
+              },
+              dataType: 'json',
+              success: function(response) {
+                  // Update the like count and button state based on the response
+                  $('#like-count-' + commentId).text(response.numb_of_likes);
+                  var likeButton = $('.like-button[data-comment-id="' + commentId + '"]');
+                  if (response.liked) {
+                      likeButton.html('<i class="fa-solid fa-heart hate"></i>');
+                  } else {
+                      likeButton.html('<i class="fa-regular fa-heart likes"></i>');
+                  }
+              }
+          });
+      });
+    });
+    
+        
+
+</script>
+  <script>
+            
+    $(document).ready(function() {
+      $('.like-button-reply').click(function() {
+          var replyId = $(this).data('reply-id');
+          var url = '{% url "add-reply-likes" post.pk %}';
+  
+          $.ajax({
+              type: 'POST',
+              url: url,
+              data: {
+                  'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                  'reply_id': replyId
+              },
+              dataType: 'json',
+              success: function(response) {
+                  // Update the like count and button state based on the response
+                  $('#like-count-' + replyId).text(response.numb_of_likes); // Corrected replyId variable usage
+                  var likeButton = $('.like-button-reply[data-reply-id="' + replyId + '"]'); // Corrected selector
+                  if (response.liked_reply) {
+                      likeButton.html('<i class="fa-solid fa-heart hate"></i>');
+                  } else {
+                      likeButton.html('<i class="fa-regular fa-heart likes"></i>');
+                  }
+              }
+            });
+        });
+      });
+   
+
+</script> 
+<script>
+  $(document).ready(function() {
+    $('#comment-form').submit(function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Serialize form data
+        var formData = $(this).serialize();
+        
+        // Get the URL for the AJAX request
+        var postDetailURL = '{% url "post-detail" post.pk %}';
+        
+        // Send POST request with AJAX
+        $.ajax({
+            type: 'POST',
+            url: postDetailURL,
+            data: formData,
+            success: function(response) {
+                // Handle success response here
+                console.log(response);
+                
+                // Replace the content of #comment-section with the updated HTML markup
+                $('#comment-section').html(response);
+                
+                // Clear the form fields after successful submission
+                $('#comment-form')[0].reset();
+            },
+            error: function(xhr, status, error) {
+                // Handle error response here
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+
+</script>
+<script>
+  $(document).ready(function() {
+    $('.delete-comment-btn').click(function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        var form = $(this).closest('.delete-comment-form');  // Find the parent form
+        var commentId = form.data('comment-id');  // Get the comment ID from data attribute
+        var formData = form.serialize();  // Serialize form data
+        
+        // Send AJAX request to delete the comment
+        $.ajax({
+            type: 'POST',
+            url: '{% url "post-detail" post.pk %}',
+            data: formData,
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+                // Remove the deleted comment from the UI
+                $('#comment-' + commentId).remove();
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
+
+
+  
+
+
+
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}

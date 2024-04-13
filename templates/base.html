@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static '' %}assests/css/style.css" />
+    <link rel="stylesheet" href="{% static '' %}assests/css/home.css" />
+    <link rel="stylesheet" href="{% static '' %}assests/css/profile-update.css" />
+    <link rel="stylesheet" href="{% static '' %}assests/css/skin/color-1.css" />
+    <link rel="stylesheet" href="{% static '' %}assests/css/darkmode.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Include ScrollReveal library via CDN -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>
+      {% block title %}Nephixs | Blog{% endblock title %}
+    </title>
+    <style>
+            .alert-dismissible {
+              /* text-align: center; */
+              width: 100%;
+              padding: 15px 20px;
+              background-color: rgb(211, 230, 230);
+              margin-bottom: 20px;
+              border-radius: 6px;
+              border-left: 10px solid var(--skin-color);
+              position: relative;
+            }
+            
+            .clear-btnn{
+              font-size: 37px;
+              position: absolute;
+              right: 5px;
+              top: 1px;
+              cursor: pointer;
+            }
+            
+            .clear-btnn:hover{
+              color: red;
+            }
+            .close-button {
+              background-color: transparent;
+              border: none;
+              cursor: pointer;
+              padding: 0;
+              margin-right: auto;
+              font-size: 30px;
+              right: 30px;
+              top: 5px;
+              position: absolute;
+              font-weight: 600;
+          }
+          
+          .close-button:focus {
+              outline: none;
+          }
+          
+          .message-content {
+              display: flex;
+              {% comment %} justify-content: space-between; {% endcomment %}
+              align-items: center;
+          }
+
+    
+    </style>
+    {% comment %}
+              <script>
+                $(document).ready(function () {
+                  $("#post-form").submit(function (e) {
+                    e.preventDefault();
+
+                    // Display "Submitting..." and the loading icon initially
+                    $("#successMessage strong").text("Submitting...");
+                    // $('#successMessage i').show(); // Show the loading icon
+                    $("#successMessage").fadeIn(); // Show the message
+
+                    $.ajax({
+                      type: "POST",
+                      url: $(this).attr("action"), // Use the form's action attribute as the URL
+                      data: $(this).serialize(),
+                      success: function (data) {
+                        if (data.success) {
+                          // Replace "Submitting..." with the success message after a delay
+                          setTimeout(function () {
+                            $("#successMessage strong").text(data.message);
+                            // // Hide the loading icon
+                            // $('#successMessage i').hide();
+                          }, 2000); // 3 seconds delay
+
+                          // Optionally reset the form after a longer delay
+                          setTimeout(function () {
+                            $("#post-form")[0].reset(); // Reset the form
+                          }, 2000); // 5 seconds delay
+
+                          // Hide the success message after a duration
+                          setTimeout(function () {
+                            $("#successMessage").fadeOut(); // Hide the message
+                          }, 7000); // 8 seconds delay
+                        } else {
+                          console.error("Error:", data.message);
+                          // Hide the message and loading icon if there was an error
+                          $("#successMessage").fadeOut();
+                          $("#successMessage i").hide();
+                        }
+                      },
+                      error: function (xhr, errmsg, err) {
+                        console.error(xhr.status + ": " + xhr.responseText);
+                        // Hide the message and loading icon if there was an error
+                        $("#successMessage").fadeOut();
+                        $("#successMessage i").hide();
+                      },
+                    });
+                  });
+                });
+              </script>
+              {% endcomment %}
+    <script>
+              /*==============toggle navbar Starts =================*/
+
+              document.addEventListener("DOMContentLoaded", function () {
+                var navToggler = document.querySelector(".nav-toggler");
+                var nav = document.querySelector(".container1");
+
+                navToggler.addEventListener("click", function () {
+                  nav.classList.toggle("nav-active");
+                  // Toggle icon class if needed
+                  var icon = navToggler.querySelector("i.fa");
+                  icon.classList.toggle("fa-bars");
+                  icon.classList.toggle("fa-times");
+                });
+
+                window.addEventListener("resize", function () {
+                  if (window.innerWidth > 1199) {
+                    nav.classList.remove("nav-active");
+                    // Reset icon class if needed
+                    var icon = navToggler.querySelector("i.fa");
+                    icon.classList.add("fa-bars");
+                    icon.classList.remove("fa-times");
+                  }
+                });
+
+                // Event listener for clicks on document
+                document.addEventListener("click", function (event) {
+                  // Check if the clicked element is outside of the nav and .nav-toggler
+                  if (
+                    !nav.contains(event.target) &&
+                    !navToggler.contains(event.target)
+                  ) {
+                    nav.classList.remove("nav-active");
+                    // Reset icon class if needed
+                    var icon = navToggler.querySelector("i.fa");
+                    icon.classList.add("fa-bars");
+                    icon.classList.remove("fa-times");
+                  }
+                });
+
+                // Event listener for links inside .aside
+                var asideLinks = document.querySelectorAll("nav a");
+                asideLinks.forEach(function (link) {
+                  link.addEventListener("click", function () {
+                    nav.classList.remove("nav-active");
+                    // Reset icon class if needed
+                    var icon = navToggler.querySelector("i.fa");
+                    icon.classList.add("fa-bars");
+                    icon.classList.remove("fa-times");
+                  });
+                });
+              });
+
+              /*==============toggle navbar  Ends=================*/
+    </script>
+    <script>
+      /*==============active link  starts=================*/
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Select all links within the navigation bar
+        const links = document.querySelectorAll(".navlist a");
+
+        // Function to remove the 'active' class from all links
+        const removeActiveClass = () => {
+          links.forEach((link) => link.classList.remove("active"));
+        };
+
+        // Initially remove 'active' class from all links
+        removeActiveClass();
+
+        // Add event listeners to each link
+        links.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            // Remove the 'active' class from all links
+            removeActiveClass();
+
+            // Add the 'active' class to the clicked link
+            event.target.classList.add("active");
+
+            // Navigate to the link's target URL
+            // If you want to prevent the default navigation and handle it manually, you can use event.preventDefault()
+            // Otherwise, you can remove this line to allow the default navigation behavior
+            window.location.href = event.target.href;
+          });
+        });
+
+        // Optionally, set the active class on the current page's link
+        // This part is useful if you want to highlight the active link when the page loads
+        links.forEach((link) => {
+          if (link.pathname === window.location.pathname) {
+            link.classList.add("active");
+          }
+        });
+      });
+      /*==============active link  Ends=================*/
+    </script>
+    <script>
+      /*==============  Ends=================*/
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get all dropdown containers
+        var dropdowns = document.querySelectorAll(".dropdown");
+
+        // Add a click event listener to each dropdown container
+        dropdowns.forEach(function (dropdown) {
+          var dropdownToggle = dropdown.querySelector(".fa-sort-desc");
+
+          // When the dropdown toggle is clicked, toggle the "show" class
+          dropdownToggle.addEventListener("mouseover", function (event) {
+            event.stopPropagation(); // Stop the click event from propagating to the document
+            var dropdownContent = dropdown.querySelector(".dropdown-content");
+            dropdownContent.classList.toggle("show");
+          });
+        });
+
+        // Add a click event listener to the document
+        document.addEventListener("click", function (event) {
+          // Check if the clicked element is not within a dropdown
+          if (!event.target.closest(".dropdown")) {
+            // If so, remove the 'show' class from all dropdown content
+            document
+              .querySelectorAll(".dropdown-content.show")
+              .forEach(function (dropdownContent) {
+                dropdownContent.classList.remove("show");
+              });
+          }
+        });
+       });
+    </script>  
+    {% comment %} <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get all dropdown containers
+        var dropdowns = document.querySelectorAll(".dropdown");
+    
+        // Add a mouseover event listener to each dropdown container
+        dropdowns.forEach(function (dropdown) {
+          var dropdownToggle = dropdown.querySelector(".fa-sort-desc");
+          var dropdownContent = dropdown.querySelector(".dropdown-content");
+    
+          // When the dropdown toggle is hovered over, toggle the "show" class
+          dropdownToggle.addEventListener("mouseover", function (event) {
+            event.stopPropagation(); // Stop the mouseover event from propagating to the document
+            dropdownContent.classList.add("show");
+          });
+    
+          // When the mouse enters the dropdown content, keep it visible
+          dropdownContent.addEventListener("mouseenter", function () {
+            dropdownContent.classList.add("show");
+          });
+    
+          // When the mouse leaves the dropdown container, hide the dropdown content
+          dropdown.addEventListener("mouseleave", function () {
+            dropdownContent.classList.remove("show");
+          });
+        });
+      });
+    </script> {% endcomment %}
+    </script>
+    <script>
+      /*==============Scroll Reveal Animations Starts=================*/
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const sr = ScrollReveal({
+          origin: "top",
+          distance: "80px",
+          duration: "2000",
+          reset: true,
+        });
+
+        //   /*==============Home=================*/
+        // sr.reveal('.home-info', {});
+        sr.reveal(".bio", { delay: 200 });
+        sr.reveal(".bioimg", { origin: "right", delay: 400 });
+        // sr.reveal('.home-info',{})
+        //   /*==============Home=================*/
+
+        //   /*==============About=================*/
+
+        sr.reveal(".hottopicsec", { delay: 400 });
+        // sr.reveal(".first", { delay: 200 });
+        sr.reveal(".first", { origin: "left", delay: 400 });
+        sr.reveal(".second", { origin: "right", delay: 400 });
+        sr.reveal(".third", { origin: "left", delay: 400 });
+        sr.reveal(".fifth", { origin: "right", delay: 400 });
+        sr.reveal(".tegsec a", { interval: 200, delay: 200 });
+        sr.reveal(".post", { delay: 50, interval: 100 });
+        // sr.reveal(".skills", { origin: "right", delay: 400 });
+
+        //   /*==============About Ends=================*/
+        //   /*==============Services Starts=================*/
+
+        sr.reveal(".popuppost", { origin: "right", delay: 400, interval: 200 });
+        sr.reveal(".comment", { origin: "right", delay: 400, interval: 200 });
+      });
+      // /*==============Scroll Reveal Animations Ends=================*/
+    </script>
+    <script>
+      /*==============progressive bar=================*/
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const progressBars = document.querySelectorAll(".js-progress");
+        progressBars.forEach((bar) => {
+          const duration = parseInt(bar.dataset.duration); // Get the duration from the element's data attribute
+          const targetPercent = parseInt(bar.dataset.count); // Get the target percentage from the element's data attribute
+          animateProgressBar(bar, targetPercent, duration);
+        });
+      });
+
+      function animateProgressBar(bar, targetPercent, duration) {
+        let currentPercent = 0;
+        const increment = 1; // Adjust this value to change the animation speed
+        const interval = duration / (targetPercent / increment);
+
+        const intervalId = setInterval(function () {
+          if (currentPercent >= targetPercent) {
+            clearInterval(intervalId);
+          } else {
+            currentPercent += increment;
+            bar.style.width = currentPercent + "%";
+            bar.nextElementSibling.textContent = currentPercent + "%"; // Update the displayed percentage
+          }
+        }, interval);
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get all close button elements
+        var closeButtons = document.querySelectorAll(".clear-btnn");
+      
+        // Add click event listener to each close button
+        closeButtons.forEach(function(closeButton) {
+          closeButton.addEventListener("click", function() {
+            // Find the parent alert element
+            var alertElement = this.parentElement;
+      
+            // Hide the parent alert element
+            alertElement.style.display = "none";
+          });
+        });
+      });
+      
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("newsletter-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", this.action, true);
+            xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        var messageElement = document.getElementById('newsletter-message');
+                        var messageContent = document.getElementById('messageContent');
+                        messageContent.textContent = data.message;
+                        if (data.success) {
+                            messageElement.style.color = '#7f92b0';
+                            messageElement.style.display = 'block'; // Show the message
+                            document.getElementById("email").value = ''; // Clear the email input field
+                            document.getElementById("name").value = ''; // Clear the name input field
+                        } else {
+                            messageElement.style.color = 'red';
+                            messageElement.style.display = 'block'; // Show the message
+                            document.getElementById("email").value = ''; // Clear the email input field
+                            document.getElementById("name").value = ''; // Clear the name input field
+                        }
+                    } else {
+                        console.error("Error:", xhr.status, xhr.statusText); // Log the status code and status text
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+      
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+      
+        // Add event listener to the clear button
+        document.getElementById("clearBtnn").addEventListener("click", function() {
+            var messageElement = document.getElementById('newsletter-message');
+            messageElement.style.display = "none"; // Hide the message
+        });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("subscription-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", this.action, true);
+            xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken")); // Add CSRF token
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        var messageElement = document.getElementById('subscription-message');
+                        var messageContent = document.getElementById('messageContent');
+                        messageContent.textContent = data.message;
+                        if (data.success) {
+                            messageElement.style.color = '#7f92b0';
+                            messageElement.style.display = 'block'; // Show the message
+                            document.getElementById("email").value = ''; // Clear the input field
+                        } else {
+                            messageElement.style.color = 'red';
+                            messageElement.style.display = 'block'; // Show the message
+                            document.getElementById("email").value = ''; // Clear the input field
+                        }
+                    } else {
+                        console.error("Error:", xhr.statusText);
+                        // Handle error cases here
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+      
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+      
+        // Add event listener to the clear button
+        document.getElementById("clearBtnn").addEventListener("click", function() {
+            var messageElement = document.getElementById('subscription-message');
+            messageElement.style.display = "none"; // Hide the message
+        });
+      }); 
+    </script>
+    <script>
+            function togglePasswordVisibility(inputId, iconId) {
+              var passwordInput = document.getElementById(inputId);
+              var icon = document.getElementById(iconId);
+
+              icon.addEventListener('click', function() {
+            if (passwordInput.value.trim() !== '') {
+              if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-lock');
+                icon.classList.add('fa-lock-open');
+              } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-lock-open');
+                icon.classList.add('fa-lock');
+              }
+            }
+          });
+
+          // Add event listener to reset input type when user starts typing
+          passwordInput.addEventListener('input', function() {
+            if (passwordInput.value.trim() === '') {
+              passwordInput.type = 'password';
+              icon.classList.remove('fa-lock-open');
+              icon.classList.add('fa-lock');
+            }
+          });
+        }
+
+        togglePasswordVisibility('password1', 'passwordIcon1');
+        togglePasswordVisibility('password2', 'passwordIcon2');
+        /*============== togglePasswordVisibility  ends=================*/
+    </script>
+    <script>
+      /*============== comment-reply  ends=================*/
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Hide all comment avatars initially
+        var commentAvatars = document.querySelectorAll(".comment-avatars");
+        commentAvatars.forEach(function(commentAvatar) {
+            commentAvatar.style.display = "none";
+        });
+        });
+        function toggleCommentAvatar(commentId) {
+            var commentAvatar = document.getElementById("comment-avatar-" + commentId);
+            // Toggle the visibility of the comment avatar
+            if (commentAvatar.style.display === "none") {
+                commentAvatar.style.display = "block";
+            } else {
+                commentAvatar.style.display = "none";
+            }
+        }
+
+              /*============== comment-reply  ends=================*/
+    </script>
+    <script>
+      // /*==============removes X Starts=================*/
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("formControl")
+          .addEventListener("input", function () {
+            const clearBtn = document.getElementById("clearBtn");
+            if (this.value) {
+              clearBtn.style.display = "inline-block";
+            } else {
+              clearBtn.style.display = "none";
+            }
+          });
+
+        document
+          .getElementById("clearBtn")
+          .addEventListener("click", function () {
+            document.getElementById("formControl").value = "";
+            this.style.display = "none";
+          });
+      });
+
+      /*==============Removes X Ends=================*/
+    </script>
+    <script>
+      // /*==============removes X Starts=================*/
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("formControl")
+          .addEventListener("input", function () {
+            const clearBtn = document.getElementById("clearBtn");
+            if (this.value) {
+              clearBtn.style.display = "inline-block";
+            } else {
+              clearBtn.style.display = "none";
+            }
+          });
+
+        document
+          .getElementById("clearBtn")
+          .addEventListener("click", function () {
+            document.getElementById("formControl").value = "";
+            this.style.display = "none";
+          });
+      });
+
+      /*==============Removes X Ends=================*/
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("post-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Display "Submitting..." and the loading icon initially
+            var successMessage = document.getElementById("successMessage");
+            successMessage.innerHTML = "<strong>Submitting...</strong>";
+            successMessage.style.display = "block";
+
+            var formData = new FormData(this);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", this.action, true);
+            xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken")); // Add CSRF token
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                  var data = JSON.parse(xhr.responseText);
+                  if (data.success) {
+                    // Replace "Submitting..." with the success message after a delay
+                    setTimeout(function () {
+                      successMessage.innerHTML =
+                        "<strong>" + data.message + "</strong>";
+                    }, 2000); // 2 seconds delay
+
+                    // Optionally reset the form after a longer delay
+                    setTimeout(function () {
+                      document.getElementById("post-form").reset(); // Reset the form
+                    }, 5000); // 5 seconds delay
+
+                    // Hide the success message after a duration
+                    setTimeout(function () {
+                      successMessage.style.display = "none";
+                    }, 8000); // 8 seconds delay
+                  } else {
+                    console.error("Error:", data.message);
+                    // Hide the message if there was an error
+                    successMessage.style.display = "none";
+                  }
+                } else {
+                  console.error("Error:", xhr.statusText);
+                  // Hide the message if there was an error
+                  successMessage.style.display = "none";
+                }
+              }
+            };
+            xhr.send(formData);
+          });
+      });
+
+      // Function to get CSRF token from cookies
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("formControll")
+          .addEventListener("input", function () {
+            const clearBtn = document.getElementById("clearBtnn");
+            if (this.value) {
+              clearBtn.style.display = "inline-block";
+            } else {
+              clearBtn.style.display = "none";
+            }
+          });
+
+        document
+          .getElementById("clearBtnn")
+          .addEventListener("click", function () {
+            document.getElementById("formControll").value = "";
+            this.style.display = "none";
+          });
+      });
+        
+    </script>
+    <script>
+      
+    
+  
+  </script>
+    {% comment %} <script>
+      $(document).ready(function() {
+        $('#reactionForm').submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            // Serialize form data
+            var formData = $(this).serialize();
+    
+            // Submit form data via AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/api/reactions/add/',
+                data: formData,
+                success: function(response) {
+                    // Update UI with the latest reaction counts
+                    updateReactionCounts(response);
+                    console.log('Reaction added successfully');
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response (if needed)
+                    console.error('Failed to add reaction:', error);
+                }
+            });
+        });
+    
+        // Function to update reaction counts on the UI
+        function updateReactionCounts(reactionCounts) {
+            var reactionCountsElement = $('#reactionCounts');
+    
+            // Clear existing counts
+            reactionCountsElement.empty();
+    
+            // Append new counts to the element
+            $.each(reactionCounts, function(reactionType, count) {
+                reactionCountsElement.append('<span>' + reactionType + ': ' + counts + '</span><br>');
+            });
+        }
+    });
+    
+    </script> {% endcomment %}
+    
+    <script>
+        $(document).ready(function() {
+            var page = 2; // Initial page number
+    
+            // Function to load more posts
+            function loadMorePosts() {
+                $.ajax({
+                    url: 'load_more_posts/', // URL to your load_more_posts view
+                    data: {
+                        'page': page,
+                    },
+                    success: function(data) {
+                        $('#post-container').append(data.posts_html); // Append new posts to the container
+                        page++; // Increment page number for the next request
+                    }
+                });
+            }
+    
+            // Click event handler for the "Load More" button
+            $('.btn-load button').click(function() {
+                loadMorePosts();
+            });
+        });
+    </script>
+
+      
+    {% comment %}
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  document
+                    .getElementById("post-form")
+                    .addEventListener("submit", function (e) {
+                      e.preventDefault();
+
+                      // Display "Submitting..." and the loading icon initially
+                      var successMessage = document.getElementById("successMessage");
+                      successMessage.innerHTML = "<strong>Submitting...</strong>";
+                      successMessage.style.display = "block";
+
+                      var formData = new FormData(this);
+
+                      var xhr = new XMLHttpRequest();
+                      xhr.open("POST", this.action, true);
+                      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken")); // Add CSRF token
+                      xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                          if (xhr.status === 200) {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.success) {
+                              // Replace "Submitting..." with the success message after a delay
+                              setTimeout(function () {
+                                successMessage.innerHTML =
+                                  "<strong>" + data.message + "</strong>";
+                              }, 2000); // 2 seconds delay
+
+                              // Optionally reset the form after a longer delay
+                              setTimeout(function () {
+                                document.getElementById("post-form").reset(); // Reset the form
+                              }, 5000); // 5 seconds delay
+
+                              // Hide the success message after a duration
+                              setTimeout(function () {
+                                successMessage.style.display = "none";
+                              }, 8000); // 8 seconds delay
+                            } else {
+                              console.error("Error:", data.message);
+                              // Hide the message if there was an error
+                              successMessage.style.display = "none";
+                            }
+                          } else {
+                            console.error("Error:", xhr.statusText);
+                            // Hide the message if there was an error
+                            successMessage.style.display = "none";
+                          }
+                        }
+                      };
+                      xhr.send(formData);
+                    });
+                });
+
+                // Function to get CSRF token from cookies
+                function getCookie(name) {
+                  var cookieValue = null;
+                  if (document.cookie && document.cookie !== "") {
+                    var cookies = document.cookie.split(";");
+                    for (var i = 0; i < cookies.length; i++) {
+                      var cookie = cookies[i].trim();
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(
+                          cookie.substring(name.length + 1)
+                        );
+                        break;
+                      }
+                    }
+                  }
+                  return cookieValue;
+                }
+              </script>
+              {% endcomment %}
+  </head>
+  <body id="top">
+    {% block header %}{% endblock header %}
+
+    <main id="main">
+      <div class="row">
+        <!-- pop up -->
+        {% if messages %}
+        <div class="alert alert-dismissible fade show padd-15 message" style="text-align: center; padding: 10px; position: relative;"  role="alert">
+            {% for message in messages %}
+                <strong style="text-align: center; margin-top: 20px;">{{ message }}</strong>
+            {% endfor %}
+            <button type="button" class="close-button" onclick="this.parentElement.style.display='none'">&times;</button>
+        </div>
+        {% endif %}
+
+        <!-- pop up ends -->
+      </div>{% block content %}
+      {% endblock content %}</main>
+
+    {% block footer %}{% endblock footer %}
+
+    <script src="{% static 'assests/scripts/app.js' %}"></script>
+    <script src="{% static 'assests/scripts/about.js' %}"></script>
+    {% comment %} <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script> {% endcomment %}
+  </body>
+</html>

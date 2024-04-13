@@ -1,0 +1,102 @@
+{% load static %}
+<footer class="container" id="footer">
+    <section class="footersec flex">
+      <div class="logofooter">
+        <div class="logof">
+          <a href="/" class="flex">
+            <img src="{% static '' %}assests/images/img/logo.png" alt="" />
+            <h1>Netphixs</h1>
+          </a>
+        </div>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci,
+          reprehenderit esse? Architecto, adipisci reiciendis! Esse quam
+          reiciendis ex mollitia veniam.
+        </p>
+        <h4>Address</h4>
+        <p>123 lorem street</p>
+        <p>Awka, Nigeria</p>
+      </div>
+      <div class="categoriesfooter">
+        <h3>Categories/Tags</h3>
+        <div class="flex">
+          <div class="catefbx">
+            <ul>
+              {% for category in categories|slice:":5" %}
+              <li><a href="{% url "view-category" category.name %}">{{category.name|title}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="catefbx">
+            <div></div>
+            <ul class="catefbxa">
+              {% for tag in tags|slice:":5" %} 
+              <li><a href="{% url "tags" tag.slug %}">#{{tag.title}}</a></li>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="newsletterfooter">
+        <h3>Newsletter</h3>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          Voluptates, ipsa.
+        </p>
+        <div class="alert alert-dismissible flex" id="newsletter-message" style="display: none;" role="alert">
+          <span id="messageContent"></span>
+          <span class="clear-btnn" id="clearBtnn">&times;</span>
+      </div>
+        <form action="{% url "newsletter" %}" method="POST" id="newsletter-form" class="flex"> 
+          {% csrf_token %}
+          <div class="flex">
+              <i class="fa-regular fa-user"></i>
+              <input type="name" name="name" placeholder="Your Name" id="name" />
+          </div>
+          <div class="flex">
+              <i class="fa-regular fa-envelope"></i>
+              <input type="email" name="email" placeholder="Email Address" id="email" /> 
+          </div>
+          <button type="submit">
+              Subscribe<i class="fa-solid fa-arrow-right"></i>
+          </button>
+      </form>
+      </div>
+    </section>
+    <div class="themeauthor container flex">
+      <div class="createdby">
+        <h4>
+          &copy; 2024 Created by
+          <a href="/" target="_blank" title="">Netphixs</a>. All rights
+          reserved.
+        </h4>
+      </div>
+      <div class="social flex">
+        <div class="social-icon">
+          <a href="#" class="flex">
+            <i class="fa-brands fa-twitter"></i>
+            <h4>Twitter</h4>
+          </a>
+        </div>
+        <div class="social-icon">
+          <a href="#" class="flex">
+            <i class="fa-brands fa-square-facebook"></i>
+            <h4>Facebook</h4>
+          </a>
+        </div>
+        <div class="social-icon">
+          <a href="#" class="flex">
+            <i class="fa-brands fa-instagram"></i>
+            <h4>Instagram</h4>
+          </a>
+        </div>
+        <div class="social-icon">
+          <a href="#" class="flex">
+            <i class="fa-brands fa-linkedin"></i>
+            <h4>Linkedin</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+    <a class="back-to-top active" data-back-to-top aria-label="back-to-top" href="#top"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+    

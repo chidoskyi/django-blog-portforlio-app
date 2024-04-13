@@ -1,0 +1,41 @@
+{% load static %}
+<form action="" method="POST" style="width: 100%;">
+  {% csrf_token %}
+  <input type="hidden" name="comment_id" value="{{ comment.id }}">
+<div class="comment-avatar  flex"  >
+  <div class="avatar">
+    {% if request.user.is_authenticated %}
+  <img src="{{ user.profile.image.url }}" style="border-radius: 50%;" alt="">
+  {% else %}
+  <img src="{% static 'assests/images/img/default.jpg' %} " style="border-radius: 50%;" alt="">
+  {% endif %}
+  </div>
+  <div class="avatar-text">
+    <div class="text-field">
+      <textarea name="body" id="" placeholder="Reply..."></textarea>
+    </div>
+    <div class="form-fields">
+      {% if user.is_authenticated %}
+<!-- Display username for authenticated users -->
+        <div class="form-field">
+          <label for="">Name</label>
+          <input type="text" value="{{ user.username }}" readonly>
+          
+        </div>
+        {% else %}
+<!-- For non-authenticated users, provide input fields for name and email -->
+    <div class="form-field">
+      <label for="">Name( or <a href="">login</a>)</label>
+      <input type="text" placeholder="Display name" name="name">
+    </div>
+    <div class="form-field1">
+      <label for="">Email</label>
+      <input type="email" placeholder="Email Address" name="email">
+    </div>
+    {% endif %}
+    </div>
+    <div class="input-submit">
+    <input type="submit" name="reply" class="btn" value="Reply">
+  </div>
+  </div>
+</form>

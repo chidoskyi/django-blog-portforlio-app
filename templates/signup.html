@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sign-Up{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+<!-- =====About Section Ends===== -->
+<section class="about section " id="about">
+  <div class="container">
+    <div class="row bg-color">
+      <div class="section-title padd-15" style="margin-bottom: -20px;">
+        <h2>SIGN UP</h2>
+      </div>
+    </div>
+    <div class="row row-signup">
+      <div class="wrapper">
+        {% comment %} <div class="row">
+          <!-- pop up -->
+          {% if messages %}
+            <div class="aler alert-dismissible fade show padd-15 message" role="alert">
+                {% for message in messages %}
+                    <strong style="text-align: center">{{ message }}</strong>
+                {% endfor %}
+            </div>
+        {% endif %}
+          <!-- pop up ends -->
+        </div> {% endcomment %}
+        <form action="{% url "sign-up" %}" method="POST">
+            {% csrf_token %}
+          <!-- <h1>Sign Up</h1> -->
+          <div class="input-box">
+            <input type="text" placeholder="Username" name="username" required>
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </div>
+          <div class="input-box">
+            <input type="email" placeholder="Email" name="email" required>
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div class="input-box input-pass">
+            <input type="password" placeholder="Password" required name="password1" id="password1">
+            <i class="fa-solid fa-lock" id="passwordIcon1"></i>
+          </div>
+          <div class="input-box input-pass" style="margin-bottom: 25px;">
+            <input type="password" placeholder="Confirm Password" required name="password2" id="password2">
+            <i class="fa-solid fa-lock" id="passwordIcon2"></i>
+          </div>
+          <div class="remember-forgot">
+            <label for="check">
+              <input type="checkbox" name="remember" id="remember">
+              Remember Me
+            </label>
+            <a href="/">Forgotten Password</a>
+          </div> 
+          <button type="submit" class="btn">Sign Up</button>
+          <div class="register-link">
+            <p>Don't have an account? <a href="{% url "login" %}">Login</a></p>
+          </div>
+        </form>
+        <div class="socials">
+          <a href=""><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href=""><i class="fa-brands fa-instagram"></i></a>
+          <a href=""><i class="fa-brands fa-facebook"></i></a>
+          <a href=""><i class="fa-brands fa-twitter"></i></a> 
+        </div>
+      </div>
+      </div>
+    </div>
+</section>
+<!-- =====About Section Ends===== -->
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}

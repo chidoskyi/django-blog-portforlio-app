@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#id_picture').attr('placeholder', 'Enter picture');
+      $('#id_title').attr('placeholder', 'Enter title');
+      $('#id_content').attr('placeholder', 'Enter content');
+      $('#id_tag').attr('placeholder', 'Enter tag');
+      $('#id_category').attr('placeholder', 'Enter category');
+    });
+  </script>
+{% endblock scripts %}
+{% block title %}Add Post{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+  <!-- =====About Section Ends===== -->
+  <section class="about section " >
+    <div class="container">
+      <div class="row bg-color">
+        <div class="section-title padd-15" style="margin-bottom: -60px;">
+          <h2>Upload Post</h2>
+        </div>
+      </div>
+      <div class="row row-signup">
+        <div class="content-section">
+            <form action="{% url "post-create" %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom textcolor">POST</legend>
+                    {% comment %} <div class="form-group">
+                        <label for="files">Upload Post</label>
+                        <input type="file" name="files" id="files" placeholder="Upload a post">
+                    </div>
+                    <div class="form-group">
+                        <label for="video_url">Video Url</label>
+                        <input type="text" id="video_url" name="video_url" placeholder="video url">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" placeholder="post title">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select name="category" id="category" class="input" multiple>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                            <option value="other">Other</option>
+                        </select>
+                        <input type="text" id="new_category" name="new_category" placeholder="Enter new category" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <select name="tags" id="tags" class="input" multiple>
+                            {% for tag in tags %}
+                            <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                            <option value="other">Other</option>
+                        </select>
+                        <input type="text" id="new_tag" name="new_tag" placeholder="Enter new tag" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea name="content" id="content" placeholder="description"></textarea>
+                    </div> {% endcomment %}
+                    {% comment %} {{form.picture}} <br><br>
+                    {{form.title}} <br><br>
+                    {{form.content}} <br><br>
+                    {{form.tag}} <br><br>
+                    {{form.category}} <br><br> {% endcomment %}
+                    <div>
+                        <label for="id_picture">Picture:</label>
+                        {{ form.picture }}
+                      </div><br>
+                      <div>
+                        <label for="id_title">Title:</label>
+                        {{ form.title }}
+                      </div><br>
+                      <div>
+                        <label for="id_content">Content:</label>
+                        {{ form.content }}
+                      </div><br>
+                      <div>
+                        <label for="id_tag">Tags:</label>
+                        {{ form.tag }}
+                      </div><br>
+                      <div>
+                        <label for="id_category">Category:</label>
+                        {{ form.category }}
+                      </div><br>
+                    <button type="submit" class="btn btn-primary">Add Post</button>
+                </fieldset>
+            </form>
+            
+        </div>
+        </div>
+      </div>
+  </section>
+  <!-- =====About Section Ends===== -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#id_title').attr('placeholder', 'Enter title');
+      $('#id_content').attr('placeholder', 'Enter Content');
+      $('#id_category').attr('placeholder', 'Enter Category');
+    });
+  </script>
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}

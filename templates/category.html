@@ -1,0 +1,258 @@
+ {% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Category | Blog{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+ <!-- =====About Section Ends===== -->
+ <section class="about section " id="about">
+    <div class="container padd">
+      <div class="row bg-color">
+        <div class="section-title padd-15">
+          <h2><i class="fa-solid fa-tag"></i>Category</h2>
+        </div>
+      </div>
+      <div class="row padd-15 row-child">
+          <div class="post-items">
+            <div class="post-header">
+              <h2>Categories</h2>
+            </div>
+            
+            {% if category_posts %}
+            {% for post in category_posts %}
+            <div class="post-content">
+              <div class="post-image">
+                <a href="{{ post.get_absolute_url }}">
+                  <img src="{{ post.picture.url }}"  alt="">
+                </a>
+              </div>
+              <div class="post-content-details">
+                <div class="post-labels" style="display: flex; justify-content: space-between;">
+                      <a href="{% url "view-category" category.name %}">{{ category.name|title }}</a>
+                    </div>
+                  <a href="details.html">
+                    <h2>{{ post.title }}</h2>
+                  </a>
+                  <p>{{ post.content|truncatechars:100|safe  }}
+                     <a href="/">Read more</a>
+                  </p>
+                  <div class="post-author-time">
+                    <img src="{{ post.author.profile.image.url }} " width="50px" height="50px" alt="">
+                    <div class="post-time">
+                      <div class="authortime flex">
+                        <h5 class="author-name">{{ post.author|title }}</h5>
+                      <h5>
+                        <i class="fa-regular fa-clock"></i>
+                        <span></span>{{post.posted|naturaltime}}
+                      </h5>
+                      </div>
+                      <div class="author-tags">
+                        <div class="flex">
+                            {% for tag in post.tag.all %}
+                          <a href="/"><h5>#{{tag}}</h5></a>
+                          {% endfor %}
+                          {% comment %} <a href="/"><h5><span>#</span>Lifestyle</h5></a> {% endcomment %}
+                        </div> 
+                        <div class="star-rating flex">
+                          <div class="reaction-counts flex" id="reactionCounts" style="margin-right: 20px;">
+                            {% comment %} <div class="reaction-comments flex" id="reactionComments">
+                              <button class="reaction" >👍</button> 
+                              <button class="reaction" >👎</button> 
+                              <button class="reaction" >❤️</button> 
+                              <button class="reaction" d>❤️‍🩹</button> 
+                              <button class="reaction" >😊</button> 
+                              <button class="reaction" >😲</button> 
+                              <button class="reaction" >🤣</button> 
+                              <button class="reaction" >😢</button> 
+                              <button class="reaction" >😡</button> 
+      
+                            </div>  {% endcomment %}
+                            {% comment %} <div class="reaction-count" >
+                              <button class="reactions">👍</button>
+                              <div id="counts">3</div>
+                            </div> {% endcomment %}
+                          </div>
+                          <span class="star" onclick="gfg(2, 1)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 2)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 3)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 4)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 5)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                      </div>
+                      <div id="output2"></div>                          
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+           <h2 class="found">Category not associated with any post yet</h2>
+           {% comment %} {% for post in posts %}
+            <div class="post-content" >
+              <div class="post-image">
+                <a href="{{ post.get_absolute_url }}">
+                  <img src="{{ post.picture.url }}" loading="lazy" alt="">
+                </a>
+              </div>
+              <div class="post-content-details">
+                  <div class="post-labels" style="display: flex; justify-content: space-between;">
+                    {% if request.user.is_authenticated %}
+                  <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                  <div>
+                    {% if post.author == user %}
+                    <a href="{% url "post-update" post.pk %}">Update</a>
+                    <a href="{% url "post-delete" post.pk %}">Delete</a>
+                    {% endif %}
+                  </div>
+                  {% else %}
+                  <a href="{% url "view-category" post.category %}">{{ post.category|title }}</a>
+                  {% endif %}
+                  </div>
+                  <a href="{% url 'post-detail' pk=post.pk %}">
+                    <h2>{{ post.title|title }}</h2>
+                  </a>
+                  <p>{{ post.content|truncatechars:100|safe  }}
+                     <a href="{% url 'post-detail' pk=post.pk %}">Read more</a>
+                  </p>
+                  <div class="post-author-time" >
+                    <img src="{{ post.author.profile.image.url }}" width="50px" height="50px" alt="">
+                    <div class="post-time">
+                      <div class="authortime flex">
+                        <h5 class="author-name">{{ post.author|title }}</h5>
+                      <h5>
+                        <i class="fa-regular fa-clock"></i>
+                        <span></span>{{post.posted|naturaltime}}
+                      </h5>
+                      </div>
+                      <div class="author-tags">
+                        <div class="flex">
+                            {% for tag in post.tag.all %}
+                          <a href="{% url "tags" tag.slug %}"><h5><span>#</span>{{tag}}</h5></a>
+                          {% endfor %}
+                          {% comment %} <a href="/"><h5><span>#</span>Lifestyle</h5></a> {% endcomment %}
+                        {% comment %} </div> 
+                        <div class="star-rating flex">
+                          <div class="reaction-counts flex" id="reactionCounts" style="margin-right: 20px;"> {% endcomment %}
+                            {% comment %} <div class="reaction-comments flex" id="reactionComments">
+                              <div class="v-shape"></div>
+                              <button class="reaction" >👍</button> 
+                              <button class="reaction" >👎</button> 
+                              <button class="reaction" >❤️</button> 
+                              <button class="reaction" d>❤️‍🩹</button> 
+                              <button class="reaction" >😊</button> 
+                              <button class="reaction" >😲</button> 
+                              <button class="reaction" >🤣</button> 
+                              <button class="reaction" >😢</button> 
+                              <button class="reaction" >😡</button> 
+      
+                            </div>  {% endcomment %}
+                            {% comment %} <div class="reaction-count" >
+                              <button class="reactions">👍</button>
+                              <div id="counts">3</div>
+                            </div> {% endcomment %}
+                          {% comment %} </div>
+                          <span class="star" onclick="gfg(2, 1)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 2)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 3)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 4)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                          <span class="star" onclick="gfg(2, 5)"><i class="fa fa-star" aria-hidden="true"></i></span>
+                      </div>
+                      <div id="output2"></div>                          
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div> 
+            {% endfor %}{% endcomment %}
+            {% endif %}
+          </div> 
+            <div class="side-bar-items flex">
+              <div class="post-header">
+              
+                <h2><i class="fa-solid fa-magnifying-glass"></i>Search</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="side-bar-item">
+                    <div>
+                      <div class="btn-search">
+                        <form method="POST" action="{% url 'post-search' %}" class="flex">
+                          {% csrf_token %}
+                          <input type="text" id="formControll" name="query"  class="form-control" placeholder="Search.." value="{{ request.POST.query }}"/>
+                          <span class="clear-btnnn" id="clearBtnn">&times;</span>
+                          <button type="submit" class="btnn" style="border: 1px solid #94a9c9; width: 50px; height: 43px; margin-left: -3px;" ><i class="fa-solid fa-magnifying-glass"></i></button>
+                      </form>
+                    </div>
+                    </div> 
+                  </div>
+                </div>
+              
+            <div class="post-header">
+              
+              <h2><i class="fa-solid fa-tag"></i>Tags</h2>
+            </div>
+              <div class="tag-contents">
+                <div class="side-bar-item">
+                  <div>
+                    {% for tag in tags %}
+                    <a href="{% url "tags" tag.slug %}" class="flex">
+                        {% comment %} {% for post in tag.posts.all %} {% endcomment %}
+                        <img src="{{ tag.image.url }}" style="border-radius: 50%;" alt="">  
+                        {% comment %} {% endfor %} {% endcomment %}
+                        {{tag.title}}
+                    </a> 
+                    {% endfor %}
+                  </div> 
+                </div>
+              </div>
+            
+            <aside class="aside-bar">
+              <div class="post-header">
+                <h2>Category</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="side-bar-item">
+                    {% for item in categories %}
+                    <div><a href="{% url "view-category" item.name %}">{{item.name|title}}</a></div>
+                    {% endfor %}
+                  </div>
+               </aside>
+
+               <aside class="aside-bar-2" style="width: 100%;">
+              <div class="post-header">
+                <h2>Newsletter</h2>
+              </div>
+                <div class="tag-contents">
+                  <div class="newsletterfooter newsletterfoter">
+                    <!-- <h3>Newsletter</h3> -->
+                    <p>
+                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      Voluptates, ipsa.
+                    </p>
+                    <div class="alert alert-dismissible flex" id="newsletter-message" style="display: none;" role="alert">
+                      <span id="messageContent"></span>
+                      <span class="clear-btnn" id="clearBtnn">&times;</span>
+                  </div>
+                    <form action="{% url "newsletter" %}" method="POST" id="newsletter-form" class="flex"> 
+                      {% csrf_token %}
+                      <div class="flex">
+                          <i class="fa-regular fa-user"></i>
+                          <input type="name" name="name" placeholder="Your Name" id="name" />
+                      </div>
+                      <div class="flex">
+                          <i class="fa-regular fa-envelope"></i>
+                          <input type="email" name="email" placeholder="Email Address" id="email" /> 
+                      </div>
+                      <button type="submit">
+                          Subscribe<i class="fa-solid fa-arrow-right"></i>
+                      </button>
+                  </form>
+                  </div>
+              </aside>
+          </div>
+      </div>   
+      </div>
+  </section>
+  
+  <!-- =====About Section Ends===== -->
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %} 

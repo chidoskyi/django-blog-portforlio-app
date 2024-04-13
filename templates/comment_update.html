@@ -1,0 +1,35 @@
+<form method="POST" action="{% url 'comment-update' comment.pk %}">
+  {% csrf_token %}
+  <div class="comment-avatar flex">
+    <div class="avatar">
+      <img style="border-radius: 50%;" src="{{ user.profile.image.url }}" alt="">
+    </div>
+    <div class="avatar-text">
+      <div class="text-field">
+        <textarea name="body" placeholder="Comment...">{{ comment.body }}</textarea>
+      </div>
+      <div class="form-fields">
+        {% if user.is_authenticated %}
+          <!-- Display username for authenticated users -->
+          <div class="form-field">
+            <label for="">Name</label>
+            <input type="text" value="{{ user.username }}" readonly>
+          </div>
+        {% else %}
+          <!-- For non-authenticated users, provide input fields for name and email -->
+          <div class="form-field">
+            <label for="">Name (or <a href="">login</a>)</label>
+            <input type="text" placeholder="Display name" name="name" value="{{ comment.name }}">
+          </div>
+          <div class="form-field1">
+            <label for="">Email</label>
+            <input type="email" placeholder="Email Address" name="email" value="{{ comment.email }}">
+          </div>
+        {% endif %}
+      </div>
+      <div class="input-submit">
+        <input type="submit" class="btn" value="Update Comment">
+      </div>
+    </div>
+  </div>
+</form>

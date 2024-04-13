@@ -1,0 +1,99 @@
+{% load static %}
+{% comment %} <form method="POST" action="">
+  {% csrf_token %}
+  <input type="hidden" name="comment" value="{{ comment }}">
+  <div class="comment-avatar flex">
+    <div class="avatar">
+    <img style="border-radius: 50%;" src="{{ user.profile.image.url }}" alt="">
+  </div>
+    <div class="avatar-text">
+      <div class="text-field">
+        <textarea name="body" placeholder="Comment..."></textarea>
+      </div>
+      <div class="form-fields">
+        {% if user.is_authenticated %}
+<!-- Display username for authenticated users -->
+    <div class="form-field">
+      <label for="">Name</label>
+      <input type="text"  value="{{ user.username }}" readonly>
+    </div>
+    {% else %}
+<!-- For non-authenticated users, provide input fields for name and email -->
+      <div class="form-field">
+        <label for="">Name( or <a href="">login</a>)</label>
+        <input type="text" placeholder="Display name" name="name">
+      </div>
+      <div class="form-field1">
+        <label for="">Email</label>
+        <input type="email" placeholder="Email Address" name="email">
+      </div>
+      {% endif %}
+      </div>
+      <div class="input-submit">
+      <input type="submit" class="btn" value="Comment">
+    </div>
+    </div>
+  </div>
+</form> {% endcomment %}
+
+{% if comment %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="edit_comment_id" value="{{ comment.pk }}">
+    <div class="comment-avatar flex">
+        <div class="avatar">
+            <img style="border-radius: 50%;" src="{{ user.profile.image.url }}" alt="">
+        </div>
+        <div class="avatar-text">
+            <div class="text-field">
+                <!-- Pre-fill the textarea with the current comment content -->
+                <textarea name="body" placeholder="Update your comment...">{{ comment.body }}</textarea>
+            </div>
+            <div class="input-submit">
+                <input type="submit" class="btn" value="Update Comment">
+            </div>
+        </div>
+    </div>
+</form> 
+{% else %}
+ <form method="POST" id="comment-form" action="">
+  {% csrf_token %}
+  <input type="hidden" name="comment" value="{{ comment }}">
+  <div class="comment-avatar flex">
+    <div class="avatar">
+      {% if request.user.is_authenticated %}
+      <img src="{{ user.profile.image.url }}" style="border-radius: 50%;" alt="">
+      {% else %}
+      <img src="{% static 'assests/images/img/default.jpg' %} " style="border-radius: 50%;" alt="">
+      {% endif %}
+  </div>
+    <div class="avatar-text">
+      <div class="text-field">
+        <textarea name="body" placeholder="Comment..."></textarea>
+      </div>
+      <div class="form-fields">
+        {% if user.is_authenticated %}
+<!-- Display username for authenticated users -->
+    <div class="form-field">
+      <label for="">Name</label>
+      <input type="text"  value="{{ user.username }}" readonly>
+    </div>
+    {% else %}
+<!-- For non-authenticated users, provide input fields for name and email -->
+      <div class="form-field">
+        <label for="">Name( or <a href="">login</a>)</label>
+        <input type="text" placeholder="Display name" name="name">
+      </div>
+      <div class="form-field1">
+        <label for="">Email</label>
+        <input type="email" placeholder="Email Address" name="email">
+      </div>
+      {% endif %}
+      </div>
+      <div class="input-submit">
+      <input type="submit" class="btn" id="submit-comment" value="Comment">
+    </div>
+    </div>
+  </div>
+</form> 
+{% endif %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+{% block header %} {% include "header.html" %} {% endblock header %}
+{% block content %}
+<!-- =====About Section Ends===== -->
+<section class="about section " id="about">
+    <div class="container">
+      <div class="row bg-color">
+        <div class="section-title padd-15" style="margin-bottom: -20px;">
+          <h2>LOGIN</h2>
+        </div>
+      </div>
+      <div class="row row-signup">
+        <div class="wrapper">
+          <form action="{% url "login" %}" method="POST">
+            {% csrf_token %}
+            <div class="input-box">
+              <input type="text" placeholder="Username" name="username" required>
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </div>
+            <div class="input-box input-pass" style="margin-bottom: 25px;">
+              <input type="password" placeholder="Password" required name="password" id="password1">
+              <i class="fa-solid fa-lock" id="passwordIcon1"></i>
+            </div>
+            <div class="remember-forgot">
+              <label for="check">
+                <input type="checkbox" name="remember">
+                Remember Me
+              </label>
+              <a href="/">Forgotten Password</a>
+            </div> 
+            <button type="submit" class="btn">Login</button>
+            <div class="register-link">
+              <p>Already have an account? <a href="{% url "sign-up" %}">signup</a></p>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div>
+  </section>
+  <!-- =====About Section Ends===== -->
+{% endblock content %}
+{% block footer %}{% include "footer.html" %}{% endblock footer %}
